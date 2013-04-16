@@ -8,7 +8,7 @@ Version:	1.7
 Release:	0.1
 License:	BSD
 Group:		Libraries/Python
-Source0:	https://pypi.python.org/packages/source/n/networkx/%{module}-%{version}.tar.gz#md5=1a73da9d571a206aa40f6ef69254f7b4
+Source0:	https://pypi.python.org/packages/source/n/networkx/%{module}-%{version}.tar.gz
 # Source0-md5:	1a73da9d571a206aa40f6ef69254f7b4
 URL:		http://networkx.github.io/index.html
 BuildRequires:	python-distribute
