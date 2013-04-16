@@ -13,7 +13,6 @@ Source0:	https://pypi.python.org/packages/source/n/networkx/%{module}-%{version}
 URL:		http://networkx.github.io/index.html
 BuildRequires:	python-distribute
 BuildRequires:	rpm-pythonprov
-# if py_postclean is used
 BuildRequires:	rpmbuild(macros) >= 1.219
 Requires:	python-modules
 BuildArch:	noarch
@@ -22,7 +21,6 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Python language software package for the creation, manipulation, and
 study of the structure, dynamics, and functions of complex networks.
-
 
 %description -l pl.UTF-8
 Pakiet oprogramowania do tworzenia, manipulacji i badania struktury
@@ -33,7 +31,6 @@ dynamiki i funkcji zlozonych sieci.
 
 %build
 %{__python} setup.py build
-
 
 %install
 rm -rf $RPM_BUILD_ROOT
