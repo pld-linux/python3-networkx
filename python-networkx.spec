@@ -1,5 +1,7 @@
 # TODO:
-# Add docs
+# - add docs
+# - package examples
+
 %define 	module	networkx
 Summary:	High-productivity software for complex networks
 Summary(pl.UTF-8):	Efektywne operacje na skompliwkoanych grafach.
