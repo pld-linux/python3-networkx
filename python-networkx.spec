@@ -15,7 +15,7 @@ Source0:	https://pypi.python.org/packages/source/n/networkx/%{module}-%{version}
 URL:		http://networkx.github.io/index.html
 BuildRequires:	python-distribute
 BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.219
+BuildRequires:	rpmbuild(macros) >= 1.710
 Requires:	python-modules
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
