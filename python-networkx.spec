@@ -1,10 +1,11 @@
 #
 # Conditional build:
 %bcond_with	doc	# Sphinx documentation, TODO: fix this
+%bcond_with	tests	# unit tests
 
 %define		module	networkx
 Summary:	High-productivity software for complex networks
-Summary(pl.UTF-8):	Efektywne operacje na skompliwkoanych grafach.
+Summary(pl.UTF-8):	Efektywne operacje na skomplikowanych grafach
 Name:		python-%{module}
 Version:	2.5
 Release:	1
@@ -13,11 +14,19 @@ Group:		Libraries/Python
 Source0:	https://pypi.python.org/packages/source/n/networkx/%{module}-%{version}.tar.gz
 # Source0-md5:	21f25be1f4373e19153a9beca63346e7
 URL:		http://networkx.github.io/index.html
-BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.710
-BuildRequires:	python3-modules
+BuildRequires:	python3-modules >= 1:3.6
 BuildRequires:	python3-setuptools
-%{?with_doc:BuildRequires:	python3-matplotlib}
+%if %{with tests}
+BuildRequires:	python3-decorator >= 4.3.0
+%endif
+BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.714
+%if %{with doc}
+BuildRequires:	python3-nb2plots
+BuildRequires:	python3-sphinx-gallery
+BuildRequires:	python3-texext
+BuildRequires:	sphinx-pdg-3 >= 1.3
+%endif
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -27,11 +36,11 @@ study of the structure, dynamics, and functions of complex networks.
 
 %description -l pl.UTF-8
 Pakiet oprogramowania do tworzenia, manipulacji i badania struktury
-dynamiki i funkcji zlozonych sieci.
+dynamiki i funkcji złożonych sieci.
 
 %package -n python3-%{module}
 Summary:	High-productivity software for complex networks
-Summary(pl.UTF-8):	Efektywne operacje na skompliwkoanych grafach.
+Summary(pl.UTF-8):	Efektywne operacje na skomplikowanych grafach
 Group:		Libraries/Python
 Requires:	python3-modules
 
@@ -41,7 +50,7 @@ study of the structure, dynamics, and functions of complex networks.
 
 %description -n python3-%{module} -l pl.UTF-8
 Pakiet oprogramowania do tworzenia, manipulacji i badania struktury
-dynamiki i funkcji zlozonych sieci.
+dynamiki i funkcji złożonych sieci.
 
 %package apidocs
 Summary:	API documentation for Python %{module} module
@@ -61,9 +70,9 @@ Dokumentacja API modułu Pythona %{module}.
 %py3_build
 
 %if %{with doc}
-cd doc
-%{__make} -j1 html
-rm -rf _build/html/_sources
+PYTHONPATH=$(pwd) \
+%{__make} -C doc html \
+	SPHINXBUILD=sphinx-build-3
 %endif
 
 %install
