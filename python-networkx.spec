@@ -1,31 +1,48 @@
+# TODO:
+# - add docs
 #
 # Conditional build:
+%bcond_without	python2	# CPython 2.x module
+%bcond_without	python3	# CPython 3.x module
 %bcond_with	doc	# Sphinx documentation, TODO: fix this
-%bcond_without	python2 # CPython 2.x module
-%bcond_without	python3 # CPython 3.x module
+%bcond_with	tests	# unit tests (2 failures)
 
 %define		module	networkx
 Summary:	High-productivity software for complex networks
-Summary(pl.UTF-8):	Efektywne operacje na skompliwkoanych grafach.
+Summary(pl.UTF-8):	Efektywne operacje na skomplikowanych grafach
 Name:		python-%{module}
-Version:	1.8.1
-Release:	7
+Version:	2.2
+Release:	1
 License:	BSD
 Group:		Libraries/Python
-Source0:	https://pypi.python.org/packages/source/n/networkx/%{module}-%{version}.tar.gz
-# Source0-md5:	b4a9e68ecd1b0164446ee432d2e20bd0
+#Source0Download: https://pypi.org/simple/networkx/
+Source0:	https://files.pythonhosted.org/packages/source/n/networkx/%{module}-%{version}.zip
+# Source0-md5:	82608a3686fb3e61f20cf13bfd3c1b4a
 URL:		http://networkx.github.io/index.html
-BuildRequires:	rpm-pythonprov
-BuildRequires:	rpmbuild(macros) >= 1.710
 %if %{with python2}
-BuildRequires:	python-distribute
+BuildRequires:	python-modules >= 1:2.7
+BuildRequires:	python-setuptools
+%if %{with tests}
+BuildRequires:	python-nose >= 0.10.1
+%endif
 %endif
 %if %{with python3}
-BuildRequires:	python3-modules
+BuildRequires:	python3-modules >= 1:3.4
 BuildRequires:	python3-setuptools
+%if %{with tests}
+BuildRequires:	python3-nose >= 0.10.1
 %endif
-%{?with_doc:BuildRequires:	python-matplotlib}
-Requires:	python-modules
+%endif
+BuildRequires:	rpm-pythonprov
+BuildRequires:	rpmbuild(macros) >= 1.714
+BuildRequires:	unzip
+%if %{with doc}
+BuildRequires:	python3-nb2plots
+BuildRequires:	python3-sphinx-gallery
+BuildRequires:	python3-texext
+BuildRequires:	sphinx-pdg-3 >= 1.3
+%endif
+Requires:	python-modules >= 1:2.7
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -35,13 +52,13 @@ study of the structure, dynamics, and functions of complex networks.
 
 %description -l pl.UTF-8
 Pakiet oprogramowania do tworzenia, manipulacji i badania struktury
-dynamiki i funkcji zlozonych sieci.
+dynamiki i funkcji złożonych sieci.
 
 %package -n python3-%{module}
 Summary:	High-productivity software for complex networks
-Summary(pl.UTF-8):	Efektywne operacje na skompliwkoanych grafach.
+Summary(pl.UTF-8):	Efektywne operacje na skomplikowanych grafach
 Group:		Libraries/Python
-Requires:	python3-modules
+Requires:	python3-modules >= 1:3.4
 
 %description -n python3-%{module}
 Python language software package for the creation, manipulation, and
@@ -49,7 +66,7 @@ study of the structure, dynamics, and functions of complex networks.
 
 %description -n python3-%{module} -l pl.UTF-8
 Pakiet oprogramowania do tworzenia, manipulacji i badania struktury
-dynamiki i funkcji zlozonych sieci.
+dynamiki i funkcji złożonych sieci.
 
 %package apidocs
 Summary:	API documentation for Python %{module} module
@@ -67,17 +84,17 @@ Dokumentacja API modułu Pythona %{module}.
 
 %build
 %if %{with python2}
-%py_build
+%py_build %{?with_tests:test}
 %endif
 
 %if %{with python3}
-%py3_build
+%py3_build %{?with_tests:test}
 %endif
 
 %if %{with doc}
-cd doc
-%{__make} -j1 html
-rm -rf _build/html/_sources
+PYTHONPATH=$(pwd) \
+%{__make} -C doc html \
+	SPHINXBUILD=sphinx-build-3
 %endif
 
 %install
@@ -86,8 +103,6 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python2}
 %py_install
 
-%py_ocomp $RPM_BUILD_ROOT%{py_sitedir}
-%py_comp $RPM_BUILD_ROOT%{py_sitedir}
 %py_postclean
 
 install -d $RPM_BUILD_ROOT%{_examplesdir}/python-%{module}-%{version}
@@ -113,18 +128,18 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with python2}
 %files
 %defattr(644,root,root,755)
-%doc README.txt
-%{py_sitescriptdir}/%{module}
-%{py_sitescriptdir}/%{module}-*.egg-info
+%doc CONTRIBUTORS.rst LICENSE.txt README.rst
+%{py_sitescriptdir}/networkx
+%{py_sitescriptdir}/networkx-%{version}-py*.egg-info
 %{_examplesdir}/python-%{module}-%{version}
 %endif
 
 %if %{with python3}
 %files -n python3-%{module}
 %defattr(644,root,root,755)
-%doc README.txt
-%{py3_sitescriptdir}/%{module}
-%{py3_sitescriptdir}/%{module}-*.egg-info
+%doc CONTRIBUTORS.rst LICENSE.txt README.rst
+%{py3_sitescriptdir}/networkx
+%{py3_sitescriptdir}/networkx-%{version}-py*.egg-info
 %{_examplesdir}/python3-%{module}-%{version}
 %endif
 
