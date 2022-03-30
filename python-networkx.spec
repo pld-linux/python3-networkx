@@ -8,7 +8,7 @@ Summary:	High-productivity software for complex networks
 Summary(pl.UTF-8):	Efektywne operacje na skomplikowanych grafach
 Name:		python-%{module}
 Version:	2.5
-Release:	3
+Release:	4
 License:	BSD
 Group:		Libraries/Python
 Source0:	https://pypi.python.org/packages/source/n/networkx/%{module}-%{version}.tar.gz
