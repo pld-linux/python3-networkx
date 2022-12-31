@@ -6,7 +6,7 @@
 %define		module	networkx
 Summary:	High-productivity software for complex networks
 Summary(pl.UTF-8):	Efektywne operacje na skomplikowanych grafach
-Name:		python-%{module}
+Name:		python3-%{module}
 Version:	2.5
 Release:	4
 License:	BSD
@@ -27,6 +27,7 @@ BuildRequires:	python3-sphinx-gallery
 BuildRequires:	python3-texext
 BuildRequires:	sphinx-pdg-3 >= 1.3
 %endif
+Requires:	python3-modules >= 1:3.6
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -38,24 +39,11 @@ study of the structure, dynamics, and functions of complex networks.
 Pakiet oprogramowania do tworzenia, manipulacji i badania struktury
 dynamiki i funkcji złożonych sieci.
 
-%package -n python3-%{module}
-Summary:	High-productivity software for complex networks
-Summary(pl.UTF-8):	Efektywne operacje na skomplikowanych grafach
-Group:		Libraries/Python
-Requires:	python3-modules
-
-%description -n python3-%{module}
-Python language software package for the creation, manipulation, and
-study of the structure, dynamics, and functions of complex networks.
-
-%description -n python3-%{module} -l pl.UTF-8
-Pakiet oprogramowania do tworzenia, manipulacji i badania struktury
-dynamiki i funkcji złożonych sieci.
-
 %package apidocs
 Summary:	API documentation for Python %{module} module
 Summary(pl.UTF-8):	Dokumentacja API modułu Pythona %{module}
 Group:		Documentation
+Obsoletes:	python-networkx-apidocs == 2.5
 
 %description apidocs
 API documentation for Python %{module} module.
@@ -90,7 +78,7 @@ find $RPM_BUILD_ROOT%{_examplesdir}/python3-%{module}-%{version} -name '*.py' \
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files -n python3-%{module}
+%files
 %defattr(644,root,root,755)
 %doc README.rst
 %{py3_sitescriptdir}/%{module}
