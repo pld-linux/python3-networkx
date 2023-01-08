@@ -7,27 +7,39 @@
 Summary:	High-productivity software for complex networks
 Summary(pl.UTF-8):	Efektywne operacje na skomplikowanych grafach
 Name:		python3-%{module}
-Version:	2.5
-Release:	4
+Version:	2.8.8
+Release:	1
 License:	BSD
 Group:		Libraries/Python
-Source0:	https://pypi.python.org/packages/source/n/networkx/%{module}-%{version}.tar.gz
-# Source0-md5:	21f25be1f4373e19153a9beca63346e7
+#Source0Download: https://pypi.org/simple/networkx/
+Source0:	https://files.pythonhosted.org/packages/source/n/networkx/%{module}-%{version}.tar.gz
+# Source0-md5:	22139ab5a47818fa00cbaa91eb126381
 URL:		http://networkx.github.io/index.html
-BuildRequires:	python3-modules >= 1:3.6
+BuildRequires:	python3-modules >= 1:3.8
 BuildRequires:	python3-setuptools
 %if %{with tests}
-BuildRequires:	python3-decorator >= 4.3.0
+#BuildRequires:	python3-codecov >= 2.1
+BuildRequires:	python3-matplotlib >= 3.4
+BuildRequires:	python3-numpy >= 1.19
+BuildRequires:	python3-pandas >= 1.3
+BuildRequires:	python3-pytest >= 7.2
+BuildRequires:	python3-pytest-cov >= 4.0
+BuildRequires:	python3-scipy >= 1.8
 %endif
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with doc}
-BuildRequires:	python3-nb2plots
-BuildRequires:	python3-sphinx-gallery
-BuildRequires:	python3-texext
-BuildRequires:	sphinx-pdg-3 >= 1.3
+BuildRequires:	python3-nb2plots >= 0.6
+BuildRequires:	python3-numpydoc >= 1.5
+BuildRequires:	python3-pillow >= 9.2
+BuildRequires:	python3-pydata-sphinx-theme >= 0.11
+# from pygraphviz.scraper import PNGScraper
+#BuildRequires:	python3-pygraphviz
+BuildRequires:	python3-sphinx-gallery >= 0.11
+BuildRequires:	python3-texext >= 0.6.6
+BuildRequires:	sphinx-pdg-3 >= 5.2
 %endif
-Requires:	python3-modules >= 1:3.6
+Requires:	python3-modules >= 1:3.8
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -56,6 +68,11 @@ Dokumentacja API modułu Pythona %{module}.
 
 %build
 %py3_build
+
+%if %{with tests}
+PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
+%{__python3} -m pytest networkx
+%endif
 
 %if %{with doc}
 PYTHONPATH=$(pwd) \
